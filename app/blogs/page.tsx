@@ -82,7 +82,7 @@ export default async function BlogsPage() {
           </div>
 
           <h1 className="text-6xl md:text-8xl font-black mb-6 animate-slide-up bg-gradient-to-l from-orange-400 via-red-400 to-orange-300 bg-clip-text text-transparent drop-shadow-2xl [text-shadow:_0_0_30px_rgb(251_146_60_/_50%)]">
-            مدونة 3RB
+            مدونة saif
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mb-10 animate-slide-up leading-relaxed drop-shadow-lg" style={{ animationDelay: '100ms' }}>

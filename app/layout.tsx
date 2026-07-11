@@ -21,14 +21,14 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "3RB - Your Complete ARC Raiders Companion",
-    template: "%s | 3RB"
+    default: "saif Your Complete ARC Raiders Companion",
+    template: "%s | saif"
   },
   description: "Comprehensive guide for ARC Raiders including items database, traders, maps, marketplace, event timers, and latest strategies.",
-  keywords: ["ARC Raiders", "3RB", "game guide", "items", "traders", "marketplace", "maps", "quests", "gaming"],
-  authors: [{ name: "3RB Team" }],
-  creator: "3RB Team",
-  publisher: "3RB",
+  keywords: ["ARC Raiders", "saif", "game guide", "items", "traders", "marketplace", "maps", "quests", "gaming"],
+  authors: [{ name: "saif Team" }],
+  creator: "saif Team",
+  publisher: "saif",
   formatDetection: {
     email: false,
     address: false,
@@ -39,24 +39,24 @@ export const metadata: Metadata = {
     locale: 'ar_SA',
     alternateLocale: ['en_US'],
     url: baseUrl,
-    title: '3RB - Your Complete ARC Raiders Companion',
+    title: 'saif - Your Complete ARC Raiders Companion',
     description: 'Comprehensive guide for ARC Raiders including items database, traders, maps, marketplace, event timers, and latest strategies.',
-    siteName: '3RB',
+    siteName: 'saif',
     images: [
       {
         url: `${baseUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: '3RB - ARC Raiders Guide',
+        alt: 'ARC Raiders Guide',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '3RB - Your Complete ARC Raiders Companion',
+    title: 'saif - Your Complete ARC Raiders Companion',
     description: 'Comprehensive guide for ARC Raiders including items database, traders, maps, marketplace, event timers, and latest strategies.',
     images: [`${baseUrl}/og-image.jpg`],
-    creator: '@3RB',
+    creator: '@saif',
   },
   robots: {
     index: true,
