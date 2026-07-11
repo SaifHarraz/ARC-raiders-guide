@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+  "build": "next build",
+  "start": "NODE_ENV=production node server.js",
+  "vercel-build": "prisma generate && next build",
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
