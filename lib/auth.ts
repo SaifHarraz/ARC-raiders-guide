@@ -105,8 +105,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               },
             });
 
+            // If the user no longer exists (deleted), invalidate the session
+            if (!dbUser) {
+              return { ...session, user: undefined } as any;
+            }
+
             // Validate session version - if mismatch, mark session as invalid
-            if (dbUser && typeof token.sessionVersion === 'number' && typeof dbUser.sessionVersion === 'number') {
+            if (typeof token.sessionVersion === 'number' && typeof dbUser.sessionVersion === 'number') {
               if (dbUser.sessionVersion !== token.sessionVersion) {
                 // Return empty session to indicate invalid session without throwing
                 return { ...session, user: undefined } as any;
@@ -114,22 +119,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
 
             // Check if user is banned
-            if (dbUser?.banned) {
+            if (dbUser.banned) {
               return { ...session, user: undefined } as any;
             }
 
             // Update session with fresh data from database
-            if (dbUser) {
-              session.user.email = dbUser.email || '';
-              session.user.name = dbUser.name || '';
-              session.user.image = dbUser.image || '';
-              // Add custom fields to session
-              (session.user as any).username = dbUser.username;
-              (session.user as any).embark_id = dbUser.embark_id;
-              (session.user as any).discord_username = dbUser.discord_username;
-              (session.user as any).role = dbUser.role;
-              (session.user as any).banned = dbUser.banned;
-            }
+            session.user.email = dbUser.email || '';
+            session.user.name = dbUser.name || '';
+            session.user.image = dbUser.image || '';
+            // Add custom fields to session
+            (session.user as any).username = dbUser.username;
+            (session.user as any).embark_id = dbUser.embark_id;
+            (session.user as any).discord_username = dbUser.discord_username;
+            (session.user as any).role = dbUser.role;
+            (session.user as any).banned = dbUser.banned;
           } catch (error) {
             // On database error, return session with token data only (don't invalidate)
             console.error('Session callback database error:', error);
