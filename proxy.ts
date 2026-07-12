@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import { NextResponse, NextRequest } from "next/server";
 import { isMaintenanceModeCached } from "@/lib/services/settings-cache";
-import { prisma } from "@/lib/prisma";
 
 // Routes that bypass maintenance mode check
 const maintenanceBypassRoutes = [
@@ -18,48 +17,17 @@ const maintenanceBypassRoutes = [
 
 // Proxy middleware for authentication (Next.js 16+)
 // Runs in Node.js runtime, so Prisma is supported
+// Note: `auth` here already runs the DB-validated session() callback from lib/auth.ts,
+// which sets session.user to undefined if sessionVersion is stale, the user is banned,
+// or the user no longer exists. So req.auth (the session object) can still be truthy
+// even when the user is effectively logged out — always check req.auth?.user, not
+// just req.auth, to correctly detect an invalidated session.
 export default auth(async (req) => {
-  let isLoggedIn = !!req.auth;
-  let isAdmin = req.auth?.user?.role === 'ADMIN';
-  let isModerator = req.auth?.user?.role === 'MODERATOR';
-  let isStaff = isAdmin || isModerator;
-  let isBanned = (req.auth?.user as any)?.banned === true;
-
-  // Validate sessionVersion against the database — the JWT token can be stale
-  // (e.g. right after a role change or ban), so we re-check here since this
-  // runs in Node.js runtime and can safely query Prisma.
-  if (isLoggedIn && req.auth?.user?.id) {
-    try {
-      const dbUser = await prisma.user.findUnique({
-        where: { id: req.auth.user.id },
-        select: { sessionVersion: true, role: true, banned: true },
-      });
-
-      const tokenSessionVersion = (req.auth.user as any)?.sessionVersion;
-
-      if (
-        !dbUser ||
-        (typeof tokenSessionVersion === 'number' &&
-          dbUser.sessionVersion !== tokenSessionVersion)
-      ) {
-        // Session is stale (role/ban changed since token was issued) — treat as logged out
-        isLoggedIn = false;
-        isAdmin = false;
-        isModerator = false;
-        isStaff = false;
-        isBanned = false;
-      } else {
-        // Use fresh values from the database
-        isAdmin = dbUser.role === 'ADMIN';
-        isModerator = dbUser.role === 'MODERATOR';
-        isStaff = isAdmin || isModerator;
-        isBanned = dbUser.banned === true;
-      }
-    } catch (error) {
-      console.error("Failed to validate session version:", error);
-      // On DB error, fall back to token data rather than blocking the request
-    }
-  }
+  const isLoggedIn = !!req.auth?.user;
+  const isAdmin = req.auth?.user?.role === 'ADMIN';
+  const isModerator = req.auth?.user?.role === 'MODERATOR';
+  const isStaff = isAdmin || isModerator;
+  const isBanned = (req.auth?.user as any)?.banned === true;
 
   const { pathname } = req.nextUrl;
 
@@ -105,9 +73,9 @@ export default auth(async (req) => {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Redirect authenticated users away from auth pages to home
-  // (now uses the DB-validated isLoggedIn, so a stale/invalidated
-  // session correctly lets the user reach /login again)
+  // Redirect authenticated users away from auth pages to home.
+  // Now correctly uses req.auth?.user, so an invalidated session
+  // (stale sessionVersion, banned, or deleted user) lets them reach /login again.
   if (isAuthRoute && isLoggedIn) {
     return NextResponse.redirect(new URL("/", req.url));
   }
