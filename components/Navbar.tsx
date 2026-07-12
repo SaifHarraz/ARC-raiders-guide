@@ -81,7 +81,7 @@ export function Navbar({ session }: NavbarProps) {
           {/* Left section - Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">3RB</span>
+              <span className="text-primary-foreground font-bold text-sm">Saif</span>
             </div>
           </Link>
 

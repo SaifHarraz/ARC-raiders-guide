@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/arcs`,
     title: 'وحدات ARC - ARC Units Database',
     description: 'Browse all ARC units in ARC Raiders. View detailed information about each unit and materials dropped.',
-    siteName: '3RB',
+    siteName: 'Saif',
     images: [
       {
         url: `${baseUrl}/og-arcs.jpg`,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: 'Browse all ARC units in ARC Raiders. View detailed information.',
     images: [`${baseUrl}/og-arcs.jpg`],
   },
-  keywords: ['ARC Raiders', 'ARC units', 'enemies', 'game guide', '3RB', 'bosses'],
+  keywords: ['ARC Raiders', 'ARC units', 'enemies', 'game guide', 'Saif', 'bosses'],
 };
 
 export default function ArcsPage() {

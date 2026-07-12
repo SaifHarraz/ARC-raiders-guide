@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ShieldAlert } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'غير مصرح - 3RB',
+  title: 'غير مصرح - Saif',
   description: 'ليس لديك صلاحية للوصول إلى هذه الصفحة',
 };
 

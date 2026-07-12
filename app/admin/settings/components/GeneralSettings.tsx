@@ -110,7 +110,7 @@ export function GeneralSettings({ settings, onUpdate }: GeneralSettingsProps) {
               onChange={(e) =>
                 setValues({ ...values, site_name: e.target.value })
               }
-              placeholder="3RB"
+              placeholder="Saif"
             />
             <p className="text-xs text-muted-foreground">
               {getSetting("site_name")?.descriptionAr}

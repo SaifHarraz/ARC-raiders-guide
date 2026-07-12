@@ -51,7 +51,7 @@ export default function BannedPage() {
 
           <div className="flex flex-col gap-3 pt-4 border-t border-border">
             <Button variant="outline" asChild className="w-full">
-              <Link href="mailto:support@3rb.com">
+              <Link href="mailto:support@Saif.com">
                 <Mail className="w-4 h-4 ml-2" />
                 تواصل مع الدعم
               </Link>
@@ -64,7 +64,7 @@ export default function BannedPage() {
           </div>
 
           <div className="text-center text-xs text-muted-foreground">
-            إذا كنت بحاجة إلى مساعدة، يرجى الاتصال بنا على support@3rb.com
+            إذا كنت بحاجة إلى مساعدة، يرجى الاتصال بنا على support@Saif.com
           </div>
         </CardContent>
       </Card>

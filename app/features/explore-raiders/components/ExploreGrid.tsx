@@ -111,7 +111,7 @@ export function ExploreGrid() {
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-l from-orange-400 via-red-400 to-orange-300 bg-clip-text text-transparent drop-shadow-2xl">
-              3RB
+              Saif
             </h1>
 
             <p className="text-lg md:text-xl text-gray-200 max-w-xl leading-relaxed drop-shadow-lg">

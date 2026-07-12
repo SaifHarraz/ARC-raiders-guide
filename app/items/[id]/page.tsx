@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             alt: item.name,
           },
         ],
-        siteName: '3RB',
+        siteName: 'Saif',
       },
       twitter: {
         card: 'summary_large_image',
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         item.item_type,
         item.rarity,
         'ARC Raiders',
-        '3RB',
+        'Saif',
         'game item',
       ].filter(Boolean),
     };

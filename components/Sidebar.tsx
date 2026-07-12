@@ -211,7 +211,7 @@ export function Sidebar() {
             )}
           >
             <div className="flex h-9 w-9 items-center justify-center rounded bg-primary/20 text-primary shrink-0">
-              <span className="text-sm font-bold">3RB</span>
+              <span className="text-sm font-bold">Saif</span>
             </div>
             <span
               className={cn(
@@ -219,7 +219,7 @@ export function Sidebar() {
                 expanded ? "opacity-100" : "opacity-0 pointer-events-none"
               )}
             >
-              3RB
+              Saif
             </span>
           </Link>
         </div>

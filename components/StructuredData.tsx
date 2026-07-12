@@ -18,7 +18,7 @@ export function getOrganizationSchema(baseUrl: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: '3RB',
+    name: 'Saif',
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description: 'Comprehensive guide and companion for ARC Raiders game',
@@ -33,7 +33,7 @@ export function getWebSiteSchema(baseUrl: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: '3RB - ARC Raiders Guide',
+    name: 'Saif - ARC Raiders Guide',
     url: baseUrl,
     description: 'Comprehensive guide for ARC Raiders including items database, traders, maps, marketplace, event timers, and latest strategies.',
     potentialAction: {
@@ -130,11 +130,11 @@ export function getArticleSchema(
     dateModified: article.dateModified?.toISOString() || new Date().toISOString(),
     author: {
       '@type': 'Organization',
-      name: article.author || '3RB Team',
+      name: article.author || 'Saif Team',
     },
     publisher: {
       '@type': 'Organization',
-      name: '3RB',
+      name: 'Saif',
       logo: {
         '@type': 'ImageObject',
         url: `${baseUrl}/logo.png`,

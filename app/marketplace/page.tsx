@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/marketplace`,
     title: 'السوق - ARC Raiders Marketplace',
     description: 'Buy and sell items with other players in the ARC Raiders marketplace.',
-    siteName: '3RB',
+    siteName: 'Saif',
     images: [
       {
         url: `${baseUrl}/og-marketplace.jpg`,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     description: 'Buy and sell items with other players in the ARC Raiders marketplace.',
     images: [`${baseUrl}/og-marketplace.jpg`],
   },
-  keywords: ['ARC Raiders', 'marketplace', 'trading', 'buy', 'sell', 'items', 'economy', '3RB'],
+  keywords: ['ARC Raiders', 'marketplace', 'trading', 'buy', 'sell', 'items', 'economy', 'Saif'],
 };
 
 export default async function MarketplacePage() {

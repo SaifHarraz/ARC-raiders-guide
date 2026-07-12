@@ -7,7 +7,7 @@ export default function TermsPage() {
 
       <h2 className="text-xl font-semibold mt-8">Use of the Service</h2>
       <p>
-        By using 3RB, you agree to use the platform responsibly and comply with
+        By using Saif, you agree to use the platform responsibly and comply with
         all applicable laws.
       </p>
 
@@ -18,7 +18,7 @@ export default function TermsPage() {
 
       <h2 className="text-xl font-semibold mt-8">Marketplace</h2>
       <p>
-        Trades are conducted between users. 3RB is not responsible for disputes
+        Trades are conducted between users. Saif is not responsible for disputes
         between parties.
       </p>
     </main>

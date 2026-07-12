@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/traders`,
     title: 'التجار - تجار آرك رايدرز',
     description: 'تصفح العناصر المتاحة من جميع التجار في آرك رايدرز. اعثر على أفضل المعدات والإمدادات.',
-    siteName: '3RB',
+    siteName: 'Saif',
     images: [
       {
         url: `${baseUrl}/og-traders.jpg`,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: 'تصفح العناصر المتاحة من جميع التجار في آرك رايدرز.',
     images: [`${baseUrl}/og-traders.jpg`],
   },
-  keywords: ['آرك رايدرز', 'التجار', 'أبولو', 'سيليست', 'لانس', 'شاني', 'تيان وين', 'تجار', '3RB'],
+  keywords: ['آرك رايدرز', 'التجار', 'أبولو', 'سيليست', 'لانس', 'شاني', 'تيان وين', 'تجار', 'Saif'],
 };
 
 export default function TradersPage() {

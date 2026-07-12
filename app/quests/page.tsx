@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/quests`,
     title: 'المهام - ARC Raiders Quests Guide',
     description: 'Browse all quests in ARC Raiders. View quest objectives and rewards.',
-    siteName: '3RB',
+    siteName: 'Saif',
     images: [
       {
         url: `${baseUrl}/og-quests.jpg`,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: 'Browse all quests in ARC Raiders. View quest objectives and rewards.',
     images: [`${baseUrl}/og-quests.jpg`],
   },
-  keywords: ['ARC Raiders', 'quests', 'missions', 'objectives', 'rewards', 'game guide', '3RB'],
+  keywords: ['ARC Raiders', 'quests', 'missions', 'objectives', 'rewards', 'game guide', 'Saif'],
 };
 
 export default function QuestsPage() {

@@ -15,7 +15,7 @@ export const defaultSettings: DefaultSetting[] = [
   // General Settings
   {
     key: "site_name",
-    value: "3RB",
+    value: "Saif",
     valueType: "STRING",
     category: "GENERAL",
     label: "Site Name",

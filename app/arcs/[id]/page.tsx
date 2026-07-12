@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
               alt: arc.name,
             },
           ],
-          siteName: '3RB',
+          siteName: 'Saif',
         },
         twitter: {
           card: 'summary_large_image',
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description,
           images: [imageUrl],
         },
-        keywords: [arc.name, 'ARC unit', 'ARC Raiders', 'enemy', 'boss', '3RB'].filter(Boolean),
+        keywords: [arc.name, 'ARC unit', 'ARC Raiders', 'enemy', 'boss', 'Saif'].filter(Boolean),
       };
     }
   } catch (error) {

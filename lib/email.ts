@@ -90,7 +90,7 @@ export async function sendVerificationEmail(email: string, token: string): Promi
     <body>
       <div class="container">
         <div class="header">
-          <h1>مرحباً بك في 3RB</h1>
+          <h1>مرحباً بك في Saif</h1>
         </div>
         <div class="content">
           <p>شكراً لتسجيلك في دليل Arc Raiders!</p>
@@ -106,7 +106,7 @@ export async function sendVerificationEmail(email: string, token: string): Promi
         </div>
         <div class="footer">
           <p>إذا لم تقم بإنشاء حساب، يمكنك تجاهل هذا البريد الإلكتروني.</p>
-          <p>&copy; 2025 3RB - دليل Arc Raiders</p>
+          <p>&copy; 2025 Saif - دليل Arc Raiders</p>
         </div>
       </div>
     </body>
@@ -114,7 +114,7 @@ export async function sendVerificationEmail(email: string, token: string): Promi
   `;
 
   const text = `
-مرحباً بك في 3RB
+مرحباً بك في Saif
 
 شكراً لتسجيلك في دليل Arc Raiders!
 
@@ -129,7 +129,7 @@ ${verificationUrl}
   const { error } = await getResendClient().emails.send({
     from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
     to: email,
-    subject: 'تأكيد البريد الإلكتروني - 3RB',
+    subject: 'تأكيد البريد الإلكتروني - Saif',
     text,
     html,
   });

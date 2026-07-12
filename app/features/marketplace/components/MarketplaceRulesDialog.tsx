@@ -33,7 +33,7 @@ export function MarketplaceRulesDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-black uppercase tracking-wide text-orange-400">
-            مرحباً بك في سوق 3RB
+            مرحباً بك في سوق Saif
           </DialogTitle>
           <p className="text-center text-sm text-muted-foreground mt-2">
             أنشئ قوائم للبيع أو الشراء مقابل بذور أو عناصر أخرى. يمكن للاعبين
@@ -86,7 +86,7 @@ export function MarketplaceRulesDialog({
               <li className="flex items-start gap-2">
                 <span className="text-orange-400 mt-1">•</span>
                 <span>
-                  <strong className="text-foreground">3RB</strong> غير مسؤول عن
+                  <strong className="text-foreground">Saif</strong> غير مسؤول عن
                   الصفقات
                 </span>
               </li>

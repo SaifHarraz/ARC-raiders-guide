@@ -12,7 +12,7 @@ export function Footer() {
           <div className="space-y-3">
             <h3 className="font-bold text-lg flex items-center gap-2">
               <Gamepad2 className="h-5 w-5" />
-              3RB
+              Saif
             </h3>
             <p className="text-sm text-muted-foreground">
               دليلك الشامل للعبة ARC Raiders - قواعد بيانات، خرائط، أدلة، وأدوات
@@ -94,7 +94,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm text-muted-foreground text-center md:text-start">
-            <p>© {currentYear} 3RB. جميع الحقوق محفوظة.</p>
+            <p>© {currentYear} Saif. جميع الحقوق محفوظة.</p>
             <p className="mt-1">
               البيانات مقدمة من{" "}
               <a
@@ -107,7 +107,7 @@ export function Footer() {
               </a>
             </p>
             <p className="mt-1">
-              © {currentYear} 3RB - حقوق الملكية الفكرية وجميع المحتويات الخاصة بلعبة ARC Raiders تعود إلى Embark Studios. هذا الموقع هو مشروع من صنع المعجبين فقط، ولا يمثل أو يتبع شركة Embark Studios بأي شكل من الأشكال.
+              © {currentYear} Saif - حقوق الملكية الفكرية وجميع المحتويات الخاصة بلعبة ARC Raiders تعود إلى Embark Studios. هذا الموقع هو مشروع من صنع المعجبين فقط، ولا يمثل أو يتبع شركة Embark Studios بأي شكل من الأشكال.
             </p>
           </div>
 

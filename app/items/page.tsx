@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/items`,
     title: 'العناصر - ARC Raiders Items Database',
     description: 'Browse all items in ARC Raiders. Search, filter by type and rarity, and view detailed item information.',
-    siteName: '3RB',
+    siteName: 'Saif',
     images: [
       {
         url: `${baseUrl}/og-items.jpg`,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: 'Browse all items in ARC Raiders. Search, filter by type and rarity.',
     images: [`${baseUrl}/og-items.jpg`],
   },
-  keywords: ['ARC Raiders', 'items', 'weapons', 'equipment', 'database', 'game items', '3RB'],
+  keywords: ['ARC Raiders', 'items', 'weapons', 'equipment', 'database', 'game items', 'Saif'],
 };
 
 export default function ItemsPage() {
