@@ -1,6 +1,5 @@
 import { Client } from 'minio'
-
-// Parse MinIO endpoint
+// Parse MinIO/S3 endpoint 
 function parseMinioEndpoint(endpoint: string | undefined) {
   if (!endpoint) {
     return { endPoint: 'localhost', port: 9000, useSSL: false };
@@ -11,19 +10,19 @@ function parseMinioEndpoint(endpoint: string | undefined) {
 
   // Split host and port
   const [endPoint, portStr] = cleanEndpoint.split(':');
-  const port = portStr ? parseInt(portStr, 10) : 9000;
+  const port = portStr ? parseInt(portStr, 10) : (useSSL ? 443 : 9000);
 
   return { endPoint, port, useSSL };
 }
 
-// MinIO client - initialized lazily
+// MinIO/S3 client - initialized lazily
 let minioClient: Client | null = null;
 
 function getMinioClient(): Client {
   if (!minioClient) {
     const { endPoint, port, useSSL } = parseMinioEndpoint(process.env.MINIO_ENDPOINT);
 
-    console.log('🔧 Initializing MinIO client with:', {
+    console.log('🔧 Initializing storage client with:', {
       endPoint,
       port,
       useSSL,
@@ -47,38 +46,37 @@ function getMinioClient(): Client {
 // Default bucket name
 export const BUCKET_NAME = process.env.MINIO_BUCKET_NAME || 'arcraiders-uploads'
 
-// Public endpoint for presigned URLs (goes through nginx)
+// Public endpoint for direct file URLs (e.g. R2 public bucket URL, or your CDN domain)
 const PUBLIC_MINIO_URL = process.env.NEXT_PUBLIC_MINIO_ENDPOINT || 'http://localhost:9000'
 
 /**
- * Rewrite internal MinIO URL to public URL
- * Converts: http://minio:9000/bucket/file -> https://arcraiders.ae/storage/bucket/file
+ * Rewrite internal storage URL to public URL
  */
 function rewriteToPublicUrl(internalUrl: string): string {
   try {
     const url = new URL(internalUrl)
     const publicUrl = new URL(PUBLIC_MINIO_URL)
 
-    // Replace protocol, host, and port with public endpoint
     url.protocol = publicUrl.protocol
     url.host = publicUrl.host
     url.port = publicUrl.port
 
-    // If public URL has a path (like /storage), prepend it
     if (publicUrl.pathname && publicUrl.pathname !== '/') {
       url.pathname = publicUrl.pathname + url.pathname
     }
 
     return url.toString()
   } catch {
-    // If URL parsing fails, return original
     return internalUrl
   }
 }
 
 /**
- * Initialize MinIO by creating the default bucket if it doesn't exist
- * Also sets public read policy so files can be accessed without presigned URLs
+ * Initialize bucket if it doesn't exist.
+ * NOTE: setBucketPolicy is skipped for R2 — R2 doesn't support S3 bucket policy API.
+ * Public read access on R2 is instead configured via the Cloudflare dashboard
+ * (bucket Settings -> Public Access toggle). This function tries the policy call
+ * for real MinIO servers, but safely no-ops if it's not supported (like on R2).
  */
 export async function initializeMinio() {
   try {
@@ -87,38 +85,40 @@ export async function initializeMinio() {
 
     if (!bucketExists) {
       await client.makeBucket(BUCKET_NAME, process.env.MINIO_REGION || 'us-east-1')
-      console.log(`✅ MinIO bucket '${BUCKET_NAME}' created successfully`)
+      console.log(`✅ Bucket '${BUCKET_NAME}' created successfully`)
     } else {
-      console.log(`✅ MinIO bucket '${BUCKET_NAME}' already exists`)
+      console.log(`✅ Bucket '${BUCKET_NAME}' already exists`)
     }
 
-    // Set bucket policy to allow public read access
-    // This allows files to be accessed directly without presigned URLs
-    const policy = {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Effect: 'Allow',
-          Principal: { AWS: ['*'] },
-          Action: ['s3:GetObject'],
-          Resource: [`arn:aws:s3:::${BUCKET_NAME}/*`],
-        },
-      ],
+    // Try to set public read policy — only works on real MinIO, not R2.
+    // R2 users: enable Public Access manually in the Cloudflare dashboard instead.
+    try {
+      const policy = {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Effect: 'Allow',
+            Principal: { AWS: ['*'] },
+            Action: ['s3:GetObject'],
+            Resource: [`arn:aws:s3:::${BUCKET_NAME}/*`],
+          },
+        ],
+      }
+      await client.setBucketPolicy(BUCKET_NAME, JSON.stringify(policy))
+      console.log(`✅ Bucket '${BUCKET_NAME}' public read policy set`)
+    } catch (policyError) {
+      console.warn(
+        `⚠️  Could not set bucket policy via API (expected on R2/Backblaze — set Public Access in your provider's dashboard instead). Continuing.`
+      )
     }
-    await client.setBucketPolicy(BUCKET_NAME, JSON.stringify(policy))
-    console.log(`✅ MinIO bucket '${BUCKET_NAME}' public read policy set`)
   } catch (error) {
-    console.error('❌ Error initializing MinIO:', error)
+    console.error('❌ Error initializing storage bucket:', error)
     throw error
   }
 }
 
 /**
- * Upload a file to MinIO
- * @param fileName - Name of the file in the bucket
- * @param fileBuffer - File buffer or stream
- * @param metadata - Optional metadata for the file
- * @returns Object URL of the uploaded file
+ * Upload a file
  */
 export async function uploadFile(
   fileName: string,
@@ -128,12 +128,11 @@ export async function uploadFile(
   try {
     const client = getMinioClient();
 
-    // Ensure bucket exists before uploading
     const bucketExists = await client.bucketExists(BUCKET_NAME)
     if (!bucketExists) {
       console.log(`Creating bucket '${BUCKET_NAME}'...`)
       await client.makeBucket(BUCKET_NAME, process.env.MINIO_REGION || 'us-east-1')
-      console.log(`✅ MinIO bucket '${BUCKET_NAME}' created successfully`)
+      console.log(`✅ Bucket '${BUCKET_NAME}' created successfully`)
     }
 
     await client.putObject(
@@ -144,14 +143,12 @@ export async function uploadFile(
       metadata
     )
 
-    // Generate public URL (no presigned signature needed since bucket has public read policy)
-    // Format: https://arcraiders.ae/storage/bucket/filename
     const url = `${PUBLIC_MINIO_URL}/${BUCKET_NAME}/${fileName}`
 
     return { success: true, url, fileName }
   } catch (error: any) {
-    console.error('❌ Error uploading file to MinIO:', error)
-    console.error('MinIO Error Details:', {
+    console.error('❌ Error uploading file:', error)
+    console.error('Storage Error Details:', {
       code: error.code,
       message: error.message,
       statusCode: error.statusCode,
@@ -162,20 +159,13 @@ export async function uploadFile(
 
 /**
  * Get a public URL for a file
- * @param fileName - Name of the file in the bucket
- * @param _expirySeconds - Deprecated, kept for backwards compatibility
- * @returns Public URL (no signature needed since bucket is public read)
  */
 export async function getFileUrl(fileName: string, _expirySeconds?: number) {
-  // Return simple public URL (bucket has public read policy)
   return `${PUBLIC_MINIO_URL}/${BUCKET_NAME}/${fileName}`
 }
 
 /**
- * Get a presigned URL for a file (for private operations like uploads)
- * @param fileName - Name of the file in the bucket
- * @param expirySeconds - URL expiry time in seconds (default: 7 days)
- * @returns Presigned URL
+ * Get a presigned URL for a file
  */
 export async function getPresignedUrl(fileName: string, expirySeconds: number = 24 * 60 * 60 * 7) {
   try {
@@ -183,14 +173,13 @@ export async function getPresignedUrl(fileName: string, expirySeconds: number = 
     const internalUrl = await client.presignedGetObject(BUCKET_NAME, fileName, expirySeconds)
     return rewriteToPublicUrl(internalUrl)
   } catch (error) {
-    console.error('❌ Error getting presigned URL from MinIO:', error)
+    console.error('❌ Error getting presigned URL:', error)
     throw error
   }
 }
 
 /**
- * Delete a file from MinIO
- * @param fileName - Name of the file to delete
+ * Delete a file
  */
 export async function deleteFile(fileName: string) {
   try {
@@ -198,14 +187,13 @@ export async function deleteFile(fileName: string) {
     await client.removeObject(BUCKET_NAME, fileName)
     return { success: true, fileName }
   } catch (error) {
-    console.error('❌ Error deleting file from MinIO:', error)
+    console.error('❌ Error deleting file:', error)
     throw error
   }
 }
 
 /**
  * List all files in the bucket
- * @param prefix - Optional prefix to filter files
  */
 export async function listFiles(prefix?: string) {
   try {
@@ -227,28 +215,20 @@ export async function listFiles(prefix?: string) {
       objectsStream.on('error', (err) => reject(err))
     })
   } catch (error) {
-    console.error('❌ Error listing files from MinIO:', error)
+    console.error('❌ Error listing files:', error)
     throw error
   }
 }
 
 /**
- * Extract MinIO filename from presigned URL
- * @param url - Presigned URL from MinIO
- * @returns filename or null
- * @example
- * extractFilenameFromUrl('http://localhost:9000/arcraiders-uploads/profiles/user.gif?X-Amz-Algorithm...')
- * // Returns: 'profiles/user.gif'
+ * Extract filename from a presigned URL
  */
 export function extractFilenameFromUrl(url: string): string | null {
   try {
     const urlObj = new URL(url);
     const pathname = urlObj.pathname;
-    // Presigned URLs have filename in pathname
-    // Example: /arcraiders-uploads/profiles/user123.jpg -> profiles/user123.jpg
     const parts = pathname.split('/').filter(Boolean);
     if (parts.length >= 2) {
-      // Skip bucket name (first part), return rest
       return parts.slice(1).join('/');
     }
     return null;
