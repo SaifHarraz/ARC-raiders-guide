@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { incrementViewCount } from "@/app/features/guides/services/guide-actions";
 import { GuideSidebar } from "@/app/features/guides/components/GuideSidebar";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeHtml } from "@/app/features/blog/utils/sanitize";
 
 const formatter = new Intl.DateTimeFormat("en-US", {
   day: "2-digit",
@@ -61,7 +61,7 @@ export default async function GuideDetailPage({
   incrementViewCount(guide.id);
 
   // Sanitize HTML content
-  let sanitizedContent = DOMPurify.sanitize(guide.content);
+ let sanitizedContent = sanitizeHtml(guide.content);
 
   // Extract headings for table of contents using regex
   const headingRegex = /<h([23])(?:\s+id="([^"]*)")?[^>]*>([^<]+)<\/h\1>/g;

@@ -1,6 +1,7 @@
-import { uploadFile } from '../lib/minio'
 import * as dotenv from 'dotenv'
 dotenv.config()
+
+import { uploadFile } from '../lib/minio'
 
 async function test() {
   console.log('📤 Testing upload to R2...')
