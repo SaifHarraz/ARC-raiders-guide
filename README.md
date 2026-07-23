@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ARC Raiders Guide (3rb Community)
+
+An Arabic-first community platform and guide for **ARC Raiders**, built with Next.js. It includes an interactive game database, community tools, and admin features for managing content.
+   **Live Demo:**  (https://arc-raiders-guide-delta.vercel.app/)
+🔗 **Live site:** [arcraiders.ae](https://arcraiders.ae/)
+    
+
+## Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL via [Prisma](https://www.prisma.io/) ORM
+- **Auth:** NextAuth
+- **Styling:** Tailwind CSS
+- **Caching / Rate limiting:** Upstash Redis
+- **File / Media storage:** Cloudflare R2
+- **Deployment:** Vercel (with Docker + Nginx support for self-hosting)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A PostgreSQL database (e.g. [Neon](https://neon.tech))
+- An Upstash Redis instance
+- Cloudflare R2 credentials (for file/image storage)
+
+### Environment Variables
+
+Create a `.env` file in the root directory with the required variables for:
+- Database connection (`DATABASE_URL`)
+- NextAuth secrets/providers
+- Upstash Redis credentials
+- Cloudflare R2 credentials
+
+> See `prisma/schema.prisma` and the `lib/` directory for the exact env vars each integration expects.
+
+### Installation
+
+```bash
+npm install
+```
+
+### Database Setup
+
+```bash
+npx prisma generate
+npx prisma migrate deploy
+```
+
+### Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app. The page auto-updates as you edit files in `app/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/              # Next.js App Router pages & routes
+components/       # Reusable UI components
+data/             # Static/game data
+data-reshaper/    # Scripts for transforming/normalizing game data
+hooks/            # Custom React hooks
+lib/              # Core utilities (db, auth, storage, redis clients, etc.)
+prisma/           # Prisma schema & migrations
+public/           # Static assets
+scripts/          # Utility/maintenance scripts
+types/            # Shared TypeScript types
+```
+
+## Deployment
+
+This project is deployed on **Vercel**, using:
+- **Neon** for serverless PostgreSQL
+- **Upstash** for Redis
+- **Cloudflare R2** for object storage
+
+A `Dockerfile`, `docker-compose.yml`, and `nginx.conf` are also included for self-hosted deployments outside of Vercel.
+
+```bash
+# Build for production
+npm run build
+npm start
+```
+
+Or with Docker:
+
+```bash
+docker compose up --build
+```
+
+## Contributing
+
+This is a community-driven project for the ARC Raiders Egyptian/Arabic community (3rb). Contributions, bug reports, and suggestions are welcome via issues and pull requests.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
