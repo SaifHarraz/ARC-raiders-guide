@@ -146,6 +146,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID!,
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+      issuer: "https://discord.com/api",
       allowDangerousEmailAccountLinking: true, // Allow Discord to link with existing accounts via email
       async profile(profile) {
         // Check if user exists and get their banned status
